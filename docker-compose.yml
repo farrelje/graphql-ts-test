@@ -1,0 +1,23 @@
+version: '3.1'
+
+services:
+  db:
+    image: postgres:latest
+    restart: always
+    volumes:
+      - ./src/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: admin
+
+# This will create a Postgres instance with two basic databases for dev and test
+# DB url for .env looks like DATABASE_URL="postgresql://admin:password@localhost:5432/app_test?schema=public"
+# Could add more services in future; this is just convenient for Postgres only ATM
+
+
+# Code to get in and check instance:
+# docker-compose up -d     
+# docker ps -a (find instance hash)
+# docker exec -it <instance name> psql -U admin

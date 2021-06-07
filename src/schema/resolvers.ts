@@ -1,30 +1,26 @@
 import { ApolloError } from "apollo-server-express";
-import { FakeDB } from "../fakeDb/users"
-import User from "../fakeDb/users"
+import { Context } from './context'
 // Database queries and the rest done here
 
 export const resolvers = {
   Query: {
     // Could also be SQL or ORM calls instead of this
-    getAllUsers: async () => {
+    getAllUsers(_parent: any, _args: any, context: Context) {
       try {
-        return FakeDB;
+          return context.prisma.user.findMany({
+            include: {
+              schematics: true,
+            },
+          })
       } catch (error) {
         throw new ApolloError(error);
       }
     },
   },
-  Mutation: {
-    // parent, args, context...
-    // Not sure of types yet
-    createUser(parent: any, args: any) {
-      // Works, but surely there's got to be a better way to do this with types
-      // input does nothing, and args: User is undefined, so build myself?
-      const { name, age, email, passwordHash, location } = args.input;
-      const newUser = new User(name, age, email, passwordHash, location)
-      FakeDB.push(newUser)
-      return newUser
-    }
-  }
+  // Todo: redo for live database version
+  // Mutation: {
+  //   // parent, args, context...
+  //   // Not sure of types yet
+  // }
   // Can also do mutations here
 };

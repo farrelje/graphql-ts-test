@@ -11,7 +11,13 @@ export const typeDefs = gql`
     age: Int!,
     email: String!,
     passwordHash: String!,
-    location: String
+    schematics: [Schematic!]
+  }
+
+  type Schematic {
+    title: String!
+    description: String!
+    private: Boolean
   }
 
   # Queries: define name and return type
