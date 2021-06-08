@@ -2,21 +2,19 @@ import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import { createServer } from "http";
 import cors from "cors";
-import { typeDefs } from "./schema/typeDefs";
-import { resolvers } from './schema/resolvers';
-import { context } from './schema/context';
+import { schema } from './graphql/schema'
+import { context } from './graphql/context';
 
 const app = express();
 app.use("*", cors());
 
 // Create a GraphQL server
-// It needs typeDefs and resolvers, which are sorted in the schema
-// TypeDefs: mutations and defs of data
-// Resolvers: functions that do something with typedefs
-// Context - access to DB at any time inside ApolloServer - can be handy
+// It needs types and resolvers, which are defined in /types files
+// types: defs of data for GraphQL to work with
+// resolvers: functions that do something with types, e.g. linkage
+// Context - access to DB at any time inside ApolloServer - pretty much necessary always
 const server = new ApolloServer({
-  typeDefs,
-  resolvers,
+  schema,
   context
 });
 
